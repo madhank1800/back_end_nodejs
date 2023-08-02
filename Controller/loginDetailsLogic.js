@@ -25,33 +25,36 @@ exports.LoginDetailsData = async (req, res) => {
   // console.log("details", details[0].password);
   //const hash = details[0].password;
 //, { expiresIn: "1h", }
+  if (details === null) {
+    console.log("failed");
+    res.send("enter correct details");
+  } else {
   
-  
-  console.log("details", details.password);
-  const hash = details.password;
-  const myPlaintextPassword = req.body.password;
-  console.log("myPlaintextPassword", myPlaintextPassword);
+    console.log("details", details.password);
+    const hash = details.password;
+    const myPlaintextPassword = req.body.password;
+    console.log("myPlaintextPassword", myPlaintextPassword);
 
-  const match = bcrypt.compare(myPlaintextPassword, hash);
-  console.log("match", match);
-  match.then((result) => {
-    let response = result;
+    const match = bcrypt.compare(myPlaintextPassword, hash);
+    console.log("match", match);
+    match.then((result) => {
+      let response = result;
 
-    console.log("result", result);
-    if (response === true) {
-      console.log("success");
-      //create token
-      const token = jwt.sign({ user }, process.env.SECRET_KEY);
-      console.log("token", token);
-       res.json({ token });
+      console.log("result", result);
+      if (response === true) {
+        console.log("success");
+        //create token
+        const token = jwt.sign({ user }, process.env.SECRET_KEY);
+        console.log("token", token);
+        // res.json({ token });
+        res.send({ token: token, name: details.firstname });
+        // res.send("succesfully sent");
+      } else {
+        console.log("failed");
+        res.send("enter correct details");
 
-     // res.send("succesfully sent");
-    } else {
-      console.log("failed");
-      res.send("enter correct details");
-
-    }
-  });
-
+      }
+    });
+  }
   // res.send(details);
 };

@@ -6,7 +6,9 @@ const router = require('./Routers/routes');
 const cors = require('cors');
  require("dotenv").config();
 const jwt = require("jsonwebtoken");
-// const bodyParser = require("body-parser");
+//const files = require("express-fileupload");
+//const path = require("path");
+ const bodyParser = require("body-parser");
 const port = 3001;
 const options = {
   useNewUrlParser: true,
@@ -24,13 +26,23 @@ con.on("open", (req, res) => {
   console.log("connected");
 });
 
+
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(
+  bodyParser.urlencoded({
+    limit: "50mb",
+    extended: true,
+    parameterLimit: 50000,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // app.use(
-//   bodyParser.urlencoded({
+//   bodyParser.urlencoded({limit: "50mb",
 //     extended: true,
 //   })
 // );
+
 
  const corsOptions = {
   AccessControlAllowOrigin: 'http://localhost:3000/',
@@ -39,6 +51,15 @@ app.use(express.urlencoded({ extended: true }));
  }
 app.use(cors(corsOptions));
 
+
+// app.use(bodyParser.json({ limit: "50mb" }));
+// app.use(
+//   bodyParser.urlencoded({
+//     limit: "50mb",
+//     extended: true,
+//     parameterLimit: 50000,
+//   }
+//   ));
 
 app.use('/routes', router);
 // app.use("/routes", router);
